@@ -6,7 +6,7 @@ npm run start
 
 cambiar el contenido del archivo room.txt en caso dde desear ejecutar otra prueba
  
-El resultado del  test original 
+El resultado del  test incluido 
  
  1: pared
  0: suelo

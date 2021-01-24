@@ -47,14 +47,12 @@ const fnConvertirRoom = (room) => {
 const fnGetIsRoomIluminado = (listaCeldas) => {
   const listaSinLuz = listaCeldas.filter(k => k.isRequiereIluminacion);
   return listaSinLuz.length === 0;
-  
 }
 
 function getNumCeldasEnColumnaIluminadas(listaRows, i, j, isPonerFoco = false) {
   
   const numCols = listaRows[0].length;
   
-  //buscar en eje x / columna
   let indexColIni = j;
   let isColIniCompleted = false;
   while (!isColIniCompleted) {
@@ -69,7 +67,6 @@ function getNumCeldasEnColumnaIluminadas(listaRows, i, j, isPonerFoco = false) {
     } else {
       isColIniCompleted = true;
     }
-    
   }
   
   let indexColFin = j;
@@ -90,7 +87,6 @@ function getNumCeldasEnColumnaIluminadas(listaRows, i, j, isPonerFoco = false) {
   }
   
   //numero de celdas en columna que ilum,inaria un foco
-  
   //ver si el rango de columnas  de celdas requiere  iluminacion
   let numColsRequiere = 0;
   for (let index = indexColIni; index <= indexColFin; index++) {
@@ -111,7 +107,6 @@ function getNumCeldasEnRowIluminadas(listaRows, i, j, isPonerFoco = false) {
   
   const numRows = listaRows.length;
   
-  //buscar en eje x / columna
   let indexRowIni = i;
   let isRowIniCompleted = false;
   while (!isRowIniCompleted) {
@@ -145,13 +140,9 @@ function getNumCeldasEnRowIluminadas(listaRows, i, j, isPonerFoco = false) {
     }
     
   }
-  
-  //numero de celdas en columna que ilum,inaria un foco
-  
-  //ver si el rango de columnas  de celdas requiere  iluminacion
+
   let numRowsRequiere = 0;
   for (let index = indexRowIni; index <= indexRowFin; index++) {
-    
     if (isPonerFoco) {
       listaRows[index][j].setTieneIluminacion();
     } else {
@@ -159,7 +150,6 @@ function getNumCeldasEnRowIluminadas(listaRows, i, j, isPonerFoco = false) {
         numRowsRequiere++;
       }
     }
-    
   }
   return numRowsRequiere;
 }
@@ -171,9 +161,9 @@ const fnGetDisposicion = (room) => {
   
   
   let isCompleted = false;
-  let iteracion = 0;
+  let iteracion = 0; //<--- solo para que en debug no se nos vaya un loop infinito
   
-  while (!isCompleted || iteracion === 50) {
+  while (!isCompleted || iteracion === 90) {
     iteracion++;
     
     //agregar un foco
@@ -199,12 +189,9 @@ const fnGetDisposicion = (room) => {
         if (a.indexLum === b.indexLum) {
           return 0;
         }
-        return a.indexLum > b.indexLum
-          ? -1
-          : 1
+        return a.indexLum > b.indexLum ? -1 : 1
       });
-    
-    
+      
     //agregar un foco a la celda con max indexLum
     const celdaOptima = listaSort[0];
     celdaOptima.setFoco();
@@ -213,11 +200,9 @@ const fnGetDisposicion = (room) => {
     getNumCeldasEnColumnaIluminadas(listaRows, celdaOptima.row, celdaOptima.col, true);
     getNumCeldasEnRowIluminadas(listaRows, celdaOptima.row, celdaOptima.col, true);
     
-    isCompleted = fnGetIsRoomIluminado(listaCeldas)
-    
+    isCompleted = fnGetIsRoomIluminado(listaCeldas);
     
   }
-  
   return listaRows;
 }
 
