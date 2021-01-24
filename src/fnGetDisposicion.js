@@ -213,12 +213,12 @@ const fnGetDisposicion = (room) => {
     getNumCeldasEnColumnaIluminadas(listaRows, celdaOptima.row, celdaOptima.col, true);
     getNumCeldasEnRowIluminadas(listaRows, celdaOptima.row, celdaOptima.col, true);
     
-    
-    let isCompleteted = fnGetIsRoomIluminado(listaCeldas)
+    isCompleted = fnGetIsRoomIluminado(listaCeldas)
     
     
   }
   
+  return listaRows;
 }
 
 module.exports = fnGetDisposicion;
