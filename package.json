@@ -1,12 +1,12 @@
 {
-  "name": "grainchan",
+  "name": "pruebagrainchan",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/app.js"
   },
-  "author": "",
+  "author": "david huerta",
   "license": "ISC",
   "devDependencies": {
     "jest": "^26.6.3"
