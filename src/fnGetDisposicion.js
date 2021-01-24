@@ -18,6 +18,10 @@ class Celda {
     this.hasFoco = true;
   }
   
+  setTieneIluminacion() {
+    this.isRequiereIluminacion = false;
+  }
+  
 }
 
 const fnConvertirRoom = (room) => {
@@ -46,7 +50,7 @@ const fnGetIsRoomIluminado = (listaCeldas) => {
   
 }
 
-function getNumCeldasEnColumnaIluminadas(listaRows, i, j) {
+function getNumCeldasEnColumnaIluminadas(listaRows, i, j, isPonerFoco = false) {
   
   const numCols = listaRows[0].length;
   
@@ -90,19 +94,25 @@ function getNumCeldasEnColumnaIluminadas(listaRows, i, j) {
   //ver si el rango de columnas  de celdas requiere  iluminacion
   let numColsRequiere = 0;
   for (let index = indexColIni; index <= indexColFin; index++) {
-    if (listaRows[i][index].isRequiereIluminacion) {
-      numColsRequiere++;
+    
+    if (isPonerFoco) {
+      listaRows[i][index].setTieneIluminacion();
+    } else {
+      if (listaRows[i][index].isRequiereIluminacion) {
+        numColsRequiere++;
+      }
     }
+    
   }
   return numColsRequiere;
 }
 
-function getNumCeldasEnRowIluminadas(listaRows, i, j) {
+function getNumCeldasEnRowIluminadas(listaRows, i, j, isPonerFoco = false) {
   
   const numRows = listaRows.length;
   
   //buscar en eje x / columna
-  let indexRowIni = j;
+  let indexRowIni = i;
   let isRowIniCompleted = false;
   while (!isRowIniCompleted) {
     if (indexRowIni > 0 && listaRows[indexRowIni - 1][j].isEspacio) {
@@ -119,7 +129,7 @@ function getNumCeldasEnRowIluminadas(listaRows, i, j) {
     
   }
   
-  let indexRowFin = j;
+  let indexRowFin = i;
   let isRowFinCompleted = false;
   while (!isRowFinCompleted) {
     if (indexRowFin < (numRows - 1) && listaRows[indexRowFin + 1][j].isEspacio) {
@@ -141,9 +151,15 @@ function getNumCeldasEnRowIluminadas(listaRows, i, j) {
   //ver si el rango de columnas  de celdas requiere  iluminacion
   let numRowsRequiere = 0;
   for (let index = indexRowIni; index <= indexRowFin; index++) {
-    if (listaRows[index][j].isRequiereIluminacion) {
-      numRowsRequiere++;
+    
+    if (isPonerFoco) {
+      listaRows[index][j].setTieneIluminacion();
+    } else {
+      if (listaRows[index][j].isRequiereIluminacion) {
+        numRowsRequiere++;
+      }
     }
+    
   }
   return numRowsRequiere;
 }
@@ -168,7 +184,7 @@ const fnGetDisposicion = (room) => {
         
         let celda = listaRows[i][j];
         
-        if (celda.isEspacio) {
+        if (celda.isRequiereIluminacion) {
           let numCeldasCol = getNumCeldasEnColumnaIluminadas(listaRows, i, j);
           let numCeldasRow = getNumCeldasEnRowIluminadas(listaRows, i, j);
           celda.setIndexLum(numCeldasCol + numCeldasRow);
@@ -190,7 +206,12 @@ const fnGetDisposicion = (room) => {
     
     
     //agregar un foco a la celda con max indexLum
-    listaSort[0].setFoco();
+    const celdaOptima = listaSort[0];
+    celdaOptima.setFoco();
+    
+    //afectgar a las celdas que
+    getNumCeldasEnColumnaIluminadas(listaRows, celdaOptima.row, celdaOptima.col, true);
+    getNumCeldasEnRowIluminadas(listaRows, celdaOptima.row, celdaOptima.col, true);
     
     
     let isCompleteted = fnGetIsRoomIluminado(listaCeldas)
